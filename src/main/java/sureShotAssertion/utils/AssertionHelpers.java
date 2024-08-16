@@ -1,5 +1,8 @@
 package sureShotAssertion.utils;
 
+import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -270,25 +273,23 @@ public class AssertionHelpers {
      * For objects of type {@link Map}, it checks the value associated with the key.
      * For other objects, it uses reflection to access the field value.
      *
-     * @param obj The object to check.
-     * @param propertyName The name of the property or key.
+     * @param object The object to check.
+     * @param fieldName The name of the property or key.
      * @param expectedValue The expected value of the property.
      * @param message The message to include in the exception if the assertion fails.
      * @throws AssertionException If the property value does not match the expected value.
      */
-    public static void assertHasPropertyValue(Object obj, String propertyName, Object expectedValue, String message) {
-        Object value = null;
-        if (obj instanceof Map) {
-            value = ((Map<?, ?>) obj).get(propertyName);
-        } else {
-            try {
-                value = obj.getClass().getDeclaredField(propertyName).get(obj);
-            } catch (Exception e) {
-                throw new AssertionException(message + " Failed to access property: " + propertyName);
-            }
-        }
-        if (!expectedValue.equals(value)) {
-            throw new AssertionException(message + " Expected value: " + expectedValue + ", but was: " + value);
+    public static void assertHasPropertyValue(Object object, String fieldName, Object expectedValue, String message) throws NoSuchFieldException, IllegalAccessException {
+        // Get the field from the object's class
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+
+        // Get the actual value of the field
+        Object actualValue = field.get(object);
+
+        // Check if the actual value matches the expected value
+        if (!expectedValue.equals(actualValue)) {
+            throw new AssertionException(message);
         }
     }
 
@@ -541,9 +542,11 @@ public class AssertionHelpers {
      * @throws AssertionException If the date string does not match the format.
      */
     public static void assertDateFormat(String date, String format, String message) {
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat(format);
+        sdf.setLenient(false); // Set leniency to false
         try {
-            new java.text.SimpleDateFormat(format).parse(date);
-        } catch (Exception e) {
+            sdf.parse(date);
+        } catch (ParseException e) {
             throw new AssertionException(message + " Date does not match format: " + format);
         }
     }
@@ -701,7 +704,7 @@ public class AssertionHelpers {
      * @param message The message to include in the exception if the assertion fails.
      * @throws AssertionException If the value is a decrement of the reference.
      */
-    public static void assertNotDecrementOf(Number value, Number reference, String message) {
+    public static void assertIsNotDecrementOf(Number value, Number reference, String message) {
         if (value.doubleValue() == reference.doubleValue() - 1) {
             throw new AssertionException(message + " Expected: " + value + " not to be decrement of: " + reference);
         }
@@ -862,10 +865,21 @@ public class AssertionHelpers {
      * @throws AssertionException If the object is not empty.
      */
     public static void assertObjectIsEmpty(Object obj, String message) {
-        if (obj instanceof Map && !((Map<?, ?>) obj).isEmpty()) {
-            throw new AssertionException(message + " Expected empty map, but was not.");
-        } else if (obj instanceof Collection && !((Collection<?>) obj).isEmpty()) {
-            throw new AssertionException(message + " Expected empty collection, but was not.");
+        if (obj instanceof Map) {
+            if (!((Map<?, ?>) obj).isEmpty()) {
+                throw new AssertionException(message + " Expected empty map, but was not.");
+            }
+        } else if (obj instanceof Collection) {
+            if (!((Collection<?>) obj).isEmpty()) {
+                throw new AssertionException(message + " Expected empty collection, but was not.");
+            }
+        } else if (obj instanceof String) {
+            if (!((String) obj).isEmpty()) {
+                throw new AssertionException(message + " Expected empty string, but was not.");
+            }
+        } else {
+            // Optionally handle other object types, if needed
+            throw new AssertionException(message + " Unsupported object type or not empty.");
         }
     }
 
@@ -877,10 +891,21 @@ public class AssertionHelpers {
      * @throws AssertionException If the object is empty.
      */
     public static void assertObjectIsNotEmpty(Object obj, String message) {
-        if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty()) {
-            throw new AssertionException(message + " Expected non-empty map, but was empty.");
-        } else if (obj instanceof Collection && ((Collection<?>) obj).isEmpty()) {
-            throw new AssertionException(message + " Expected non-empty collection, but was empty.");
+        if (obj instanceof Map) {
+            if (((Map<?, ?>) obj).isEmpty()) {
+                throw new AssertionException(message + " Expected non-empty map, but was empty.");
+            }
+        } else if (obj instanceof Collection) {
+            if (((Collection<?>) obj).isEmpty()) {
+                throw new AssertionException(message + " Expected non-empty collection, but was empty.");
+            }
+        } else if (obj instanceof String) {
+            if (((String) obj).isEmpty()) {
+                throw new AssertionException(message + " Expected non-empty string, but was empty.");
+            }
+        } else {
+            // Optionally handle other object types, if needed
+            throw new AssertionException(message + " Unsupported object type.");
         }
     }
 
