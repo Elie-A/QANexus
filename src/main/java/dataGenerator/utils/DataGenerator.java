@@ -1,4 +1,4 @@
 package dataGenerator.utils;
 
-public class JsonGenerator {
+public class DataGenerator {
 }

@@ -1,7 +1,7 @@
 
 import org.junit.jupiter.api.Test;
-import sureShotAssertion.utils.AssertionException;
-import sureShotAssertion.utils.AssertionHelpers;
+import qaNexusAssertion.utils.AssertionException;
+import qaNexusAssertion.utils.AssertionHelpers;
 
 import java.util.*;
 import java.util.regex.Pattern;

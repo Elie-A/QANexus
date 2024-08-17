@@ -1,6 +1,6 @@
-package sureShotAssertion.utils;
+package qaNexusAssertion.utils;
 
-import sureShotAssertion.constants.Constants;
+import qaNexusAssertion.constants.Constants;
 
 public class AssertionException extends RuntimeException {
     public AssertionException(String message) {

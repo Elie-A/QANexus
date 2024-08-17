@@ -1,4 +1,4 @@
-package sureShotAssertion.constants;
+package qaNexusAssertion.constants;
 
 public class Constants {
 
