@@ -1,5 +1,13 @@
-package dataGenerator.enums;
+package qaNexusDataGenerator.enums;
 
+/**
+ * Enum representing phone number patterns for various countries.
+ * <p>
+ * Each enum constant contains a regular expression pattern that matches the standard phone number format for
+ * the corresponding country. These patterns can be used to validate or format phone numbers according to
+ * international standards.
+ * </p>
+ */
 public enum CountryCodePatternEnums {
     AF("\\+93 \\(\\d{3}\\) \\d{3}-\\d{4}"),
     AL("\\+355 \\d{2} \\d{3} \\d{4}"),

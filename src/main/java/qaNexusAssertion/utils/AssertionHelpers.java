@@ -61,6 +61,23 @@ public class AssertionHelpers {
     }
 
     /**
+     * Asserts that two objects are not equal.
+     *
+     * @param expected The object that is expected to be different.
+     * @param actual The actual object.
+     * @param message The message to include in the exception if the assertion fails.
+     * @throws AssertionException If the objects are equal.
+     */
+    public static void assertNotEquals(Object expected, Object actual, String message) {
+        if (expected == null && actual == null) {
+            throw new AssertionException(message + " Both objects are null, expected them to be different.");
+        }
+        if (expected != null && expected.equals(actual)) {
+            throw new AssertionException(message + " Expected objects to be different, but both were: " + actual);
+        }
+    }
+
+    /**
      * Asserts that two objects are deeply equal. This is a strict equality check that relies on the
      * {@link Object#equals(Object)} method.
      *
@@ -72,6 +89,21 @@ public class AssertionHelpers {
     public static void assertDeepEquals(Object expected, Object actual, String message) {
         if (!expected.equals(actual)) {
             throw new AssertionException(message + " Expected: " + expected + ", but was: " + actual);
+        }
+    }
+
+    /**
+     * Asserts that two objects are not deeply equal. This is a strict inequality check that relies on the
+     * {@link Object#equals(Object)} method.
+     *
+     * @param expected The object that is expected to be different.
+     * @param actual The actual object.
+     * @param message The message to include in the exception if the assertion fails.
+     * @throws AssertionException If the objects are deeply equal.
+     */
+    public static void assertNotDeepEquals(Object expected, Object actual, String message) {
+        if (expected.equals(actual)) {
+            throw new AssertionException(message + " Expected objects to be different, but both were deeply equal: " + actual);
         }
     }
 
@@ -147,6 +179,21 @@ public class AssertionHelpers {
     }
 
     /**
+     * Asserts that a number is not within the specified range (exclusive).
+     *
+     * @param value The value to check.
+     * @param min The minimum value (exclusive).
+     * @param max The maximum value (exclusive).
+     * @param message The message to include in the exception if the assertion fails.
+     * @throws AssertionException If the value is within the specified range.
+     */
+    public static void assertNotInRange(Number value, Number min, Number max, String message) {
+        if (value.doubleValue() > min.doubleValue() && value.doubleValue() < max.doubleValue()) {
+            throw new AssertionException(message + " Expected: " + value + " to not be in range (" + min + ", " + max + ")");
+        }
+    }
+
+    /**
      * Asserts that a number is within the specified range (inclusive).
      *
      * @param value The value to check.
@@ -158,6 +205,21 @@ public class AssertionHelpers {
     public static void assertInRangeIncluded(Number value, Number min, Number max, String message) {
         if (value.doubleValue() < min.doubleValue() || value.doubleValue() > max.doubleValue()) {
             throw new AssertionException(message + " Expected: " + min + " <= " + value + " <= " + max);
+        }
+    }
+
+    /**
+     * Asserts that a number is not within the specified range (inclusive).
+     *
+     * @param value The value to check.
+     * @param min The minimum value (inclusive).
+     * @param max The maximum value (inclusive).
+     * @param message The message to include in the exception if the assertion fails.
+     * @throws AssertionException If the value is within the specified range.
+     */
+    public static void assertNotInRangeIncluded(Number value, Number min, Number max, String message) {
+        if (value.doubleValue() >= min.doubleValue() && value.doubleValue() <= max.doubleValue()) {
+            throw new AssertionException(message + " Expected: " + value + " to not be in range [" + min + ", " + max + "]");
         }
     }
 

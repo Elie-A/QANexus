@@ -408,4 +408,37 @@ public class AssertionHelpersTest {
         AssertionHelpers.assertFunctionReturns("expected", () -> "expected", "Function should return expected value");
         assertThrows(AssertionException.class, () -> AssertionHelpers.assertFunctionReturns("expected", () -> "actual", "Function should return expected value"));
     }
+
+    @Test
+    void assertNotEqualsTest() {
+        AssertionHelpers.assertNotEquals("test", "different", "Values should not be equal");
+        AssertionHelpers.assertNotEquals(null, "different", "Values should not be equal");
+        assertThrows(AssertionException.class, () -> AssertionHelpers.assertNotEquals("test", "test", "Values should not be equal"));
+        assertThrows(AssertionException.class, () -> AssertionHelpers.assertNotEquals(null, null, "Values should not be equal"));
+    }
+
+    @Test
+    void assertNotDeepEqualsTest() {
+        AssertionHelpers.assertNotDeepEquals("test", "different", "Values should not be deeply equal");
+        assertThrows(AssertionException.class, () -> AssertionHelpers.assertNotDeepEquals("test", "test", "Values should not be deeply equal"));
+    }
+
+    @Test
+    void assertNotInRangeTest() {
+        AssertionHelpers.assertNotInRange(5, 10, 20, "Value should not be in range");
+        assertThrows(AssertionException.class, () -> AssertionHelpers.assertNotInRange(15, 10, 20, "Value should not be in range"));
+    }
+
+    @Test
+    void assertNotInRangeIncludedTest() {
+        AssertionHelpers.assertNotInRangeIncluded(5, 10, 20, "Value should not be in range [inclusive]");
+        assertThrows(AssertionException.class, () -> AssertionHelpers.assertNotInRangeIncluded(10, 10, 20, "Value should not be in range [inclusive]"));
+        assertThrows(AssertionException.class, () -> AssertionHelpers.assertNotInRangeIncluded(20, 10, 20, "Value should not be in range [inclusive]"));
+    }
+
+    @Test
+    void assertIsNullOrUndefinedTest() {
+        AssertionHelpers.assertIsNullOrUndefined(null, "Object should be null or undefined");
+        assertThrows(AssertionException.class, () -> AssertionHelpers.assertIsNullOrUndefined("value", "Object should be null or undefined"));
+    }
 }
